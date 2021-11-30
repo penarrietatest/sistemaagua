@@ -1,0 +1,89 @@
+<!-- ======================================================================================================= -->
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Usuarios</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Usuarios</a></li>
+                        <li class="breadcrumb-item active">Ver</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <?php if ($this->session->flashdata("success")) : ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle"></i><?php echo $this->session->flashdata("success") ?>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <?php endif; ?>
+                <!-- Default box -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex flex-row-reverse bd-highlight">
+                            <!-- Button trigger modal -->
+                            <a href="<?php echo base_url(); ?>users/add" class="btn btn-outline-info btn-xs p-2 bd-highlight">
+                                <i class="fas fa-user-plus"></i> Nuevo usuario
+                            </a>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="" class="table table-striped table-bordered dt-responsive nowrap display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nombres</th>
+                                    <th>1er apellido</th>
+                                    <th>2do apellido</th>
+                                    <th>Rol</th>
+                                    <th>Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($users)) : ?>
+                                    <?php foreach ($users as $user) : ?>
+                                        <tr>
+                                            <td><?php echo $user->id; ?></td>
+                                            <td><?php echo $user->names; ?></td>
+                                            <td><?php echo $user->firstname; ?></td>
+                                            <td><?php echo $user->lastname; ?></td>
+                                            <td><?php echo $user->rol; ?></td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a href="<?php echo base_url(); ?>users/edit/<?php echo $user->id; ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                                                    <a href="<?php echo base_url(); ?>users/delete/<?php echo $user->id; ?>" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<!-- ======================================================================================================= -->
