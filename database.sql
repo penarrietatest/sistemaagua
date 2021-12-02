@@ -1,3 +1,5 @@
+DROP DATABASE watersystem;
+
 CREATE DATABASE watersystem;
 	use watersystem;
 
@@ -49,7 +51,7 @@ CREATE TABLE meters (
   status INT,
   FOREIGN KEY (id_affiliate) REFERENCES affiliates (id)
 );
-INSERT INTO meters VALUES (1, '123456', 1, 0, '2021-11-24', 'Nuevo', 1);
+INSERT INTO meters VALUES (1, '1', 1, 0, '2021-11-24', 'Nuevo', 1);
 
 CREATE TABLE prices (
   id int PRIMARY KEY AUTO_INCREMENT,
@@ -78,6 +80,10 @@ CREATE TABLE details (
   currentdate DATE,
   dateofissue DATE,
   id_affiliate INT,
+  amount FLOAT,
+  notify INT,
+  missingmeeting INT,
+  other INT,
   total FLOAT,
   status INT,
   FOREIGN KEY (id_affiliate) REFERENCES affiliates (id),

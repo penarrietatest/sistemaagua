@@ -68,8 +68,8 @@
                                             <td><?php echo $meter->lote; ?></td>
                                             <td>
                                                 <div class="btn-group">
-                                                    <a href="<?php echo base_url(); ?>affiliates/edit/<?php echo $meter->id; ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                                                    <a href="<?php echo base_url(); ?>affiliates/delete/<?php echo $meter->id; ?>" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+                                                    <a href="<?php echo base_url(); ?>meters/edit/<?php echo $meter->id; ?>" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                                                    <a href="<?php echo base_url(); ?>meters/delete/<?php echo $meter->id; ?>" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
                                                 </div>
                                             </td>
                                         </tr>

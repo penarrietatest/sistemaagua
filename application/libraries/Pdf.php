@@ -22,7 +22,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             $this->Cell(0,14,'RECIBO DE INGRESO',0,0,'C');
             $this->Ln(13);
        }
-       // El pie del pdf
+       // El pie del PDF
        public function Footer(){
            $this->SetY(-15);
            $this->SetFont('Arial','I',8);

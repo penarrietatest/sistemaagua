@@ -44,7 +44,7 @@ class Affiliates extends CI_Controller
 		$this->form_validation->set_rules("names", "nombres", "required|regex_match[/^[a-zñáéíóúüA-ZÑÁÉÍÓÚÜ ,.]*$/u]");
 		$this->form_validation->set_rules("firstname", "primer apellido", "required|regex_match[/^[a-zñáéíóúüA-ZÑÁÉÍÓÚÜ ,.]*$/u]");
 		$this->form_validation->set_rules("lastname", "segundo apellido", "regex_match[/^[a-zñáéíóúüA-ZÑÁÉÍÓÚÜ ,.]*$/u]");
-		$this->form_validation->set_rules("address", "direccion", "required|regex_match[/^[a-zñáéíóúüA-ZÑÁÉÍÓÚÜ ,.]*$/u]");
+		$this->form_validation->set_rules("address", "direccion", "required");
 		$this->form_validation->set_rules("appletree", "manzano", "required|alpha_numeric_spaces");
 		$this->form_validation->set_rules("lote", "lote", "required|alpha_numeric_spaces");
 		$this->form_validation->set_rules("phone", "telefono", "alpha_numeric_spaces");
@@ -59,6 +59,46 @@ class Affiliates extends CI_Controller
 			$this->add();
 		}
 	}
+
+	public function edit($id){
+		$data = array('affiliate' => $this->Affiliates_model->getAffiliate($id));
+		$this->load->view("layouts/header");
+		$this->load->view("layouts/aside");
+		$this->load->view("content/affiliates/affiliateedit", $data);
+		$this->load->view("layouts/footer");
+	}
+
+	public function update(){
+		$affilateId = $this->input->post("affilateId");
+		$ci = $this->input->post("ci");
+		$names = ucwords($this->input->post("names"));
+		$firstname = ucwords($this->input->post("firstname"));
+		$lastname = ucwords($this->input->post("lastname"));
+		$address = $this->input->post("address");
+		$appletree = $this->input->post("appletree");
+		$lote = $this->input->post("lote");
+		$phone = $this->input->post("phone");
+
+		$this->form_validation->set_rules("ci", "numero de carnet", "required|alpha_numeric_spaces");
+		$this->form_validation->set_rules("names", "nombres", "required|regex_match[/^[a-zñáéíóúüA-ZÑÁÉÍÓÚÜ ,.]*$/u]");
+		$this->form_validation->set_rules("firstname", "primer apellido", "required|regex_match[/^[a-zñáéíóúüA-ZÑÁÉÍÓÚÜ ,.]*$/u]");
+		$this->form_validation->set_rules("lastname", "segundo apellido", "regex_match[/^[a-zñáéíóúüA-ZÑÁÉÍÓÚÜ ,.]*$/u]");
+		$this->form_validation->set_rules("address", "direccion", "required");
+		$this->form_validation->set_rules("appletree", "manzano", "required|alpha_numeric_spaces");
+		$this->form_validation->set_rules("lote", "lote", "required|alpha_numeric_spaces");
+		$this->form_validation->set_rules("phone", "telefono", "alpha_numeric_spaces");
+
+		if ($this->form_validation->run()) {
+			$data = array('ci' => $ci,'names' => $names, 'firstname' => $firstname, 'lastname' => $lastname, 'address' => $address, 'appletree' => $appletree, 'lote' => $lote, 'phone' => $phone, 'status' => 1);
+			if ($this->Affiliates_model->update($affilateId, $data)) {
+				$this->session->set_flashdata("success"," Modificacion realizado exitosamente.");
+				redirect(base_url()."affiliates");
+			}
+		}else{
+			$this->edit($affilateId);
+		}
+	}
+
 
 	public function delete($id)
 	{

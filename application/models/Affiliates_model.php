@@ -15,6 +15,15 @@ class Affiliates_model extends CI_Model {
 		return $this->db->insert("affiliates", $data);
 	}
 
+	public function getAffiliate($id){
+		$this->db->select("a.*");
+		$this->db->from("affiliates a");
+		$this->db->where("a.id", $id);
+		$this->db->where("a.status", 1);
+		$resultado =$this->db->get();
+		return $resultado->row();
+	}
+
 	public function update($id, $data){
 		$this->db->where("id", $id);
 		return $this->db->update("affiliates", $data);

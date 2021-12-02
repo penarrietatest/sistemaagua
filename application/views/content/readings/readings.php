@@ -22,8 +22,10 @@
                 <?php endif; ?>
                     <form action="<?php echo base_url();?>readings/searchaffiliate" method="POST">
                         <div class="input-group">
-                            <input type="search" name="appletree" class="form-control form-control-lg" placeholder="Manzano." value="51">
-                            <input type="search" name="lote" class="form-control form-control-lg" placeholder="Lote" value="7">
+                            <input type="search" name="appletree" class="form-control form-control-lg <?php echo !empty(form_error("appletree")) ? 'is-invalid' : '' ?>" placeholder="Manzano." value="<?php echo set_value("appletree"); ?>">
+                            <?php echo form_error("appletree", '<div class="invalid-feedback">', '</div>'); ?>
+                            <input type="search" name="lote" class="form-control form-control-lg <?php echo !empty(form_error("lote")) ? 'is-invalid' : '' ?>" placeholder="Lote" value="<?php echo set_value("lote"); ?>">
+                            <?php echo form_error("lote", '<div class="invalid-feedback">', '</div>'); ?>
                             <div class="input-group-append">
                                 <button type="submit" class="btn btn-lg btn-default">
                                     <i class="fa fa-search"></i>

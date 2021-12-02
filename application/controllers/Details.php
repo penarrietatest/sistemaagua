@@ -31,15 +31,17 @@ class Details extends CI_Controller
 	}
 
 	public function searchdetail(){
-
-		$search = $this->input->post("search");
-		$this->form_validation->set_rules("search", "Ingrese C.I. para buscar", "required");
+		$appletree = $this->input->post("appletree");
+		$lote = $this->input->post("lote");
+		$this->form_validation->set_rules("appletree", "manzano", "required");
+		$this->form_validation->set_rules("lote", "lote", "required");
 
 		if ($this->form_validation->run()) {
-			if ($this->Details_model->getAffiliate($search)) {
+
+			if ($this->Details_model->getAffiliate($appletree, $lote)) {
 				$data = array(
-							'details' => $this->Details_model->getPayAffiliate($search), 
-							'meter' => $this->Details_model->getMeter($search));
+							'details' => $this->Details_model->getPayAffiliate($appletree, $lote), 
+							'meter' => $this->Details_model->getMeter($appletree, $lote));
 
 				$this->load->view("layouts/header");
 				$this->load->view("layouts/aside");
@@ -54,11 +56,22 @@ class Details extends CI_Controller
 		}	
 	}
 
-
 	public function generateinvoice($id, $ci){
-		$data = array('status' => 1);
+
+		$missingmeeting = $this->input->post("missingmeeting");
+		$other = $this->input->post("other");
+
+		$datetoday = date("Y-m-d h:i:s");
+		if($missingmeeting == 1) {
+			$missingmeeting = 50;
+		} else {
+			$missingmeeting = 0;
+		}
+
+		$total = $missingmeeting + $other;
+
+		$data = array('dateofissue' => $datetoday, 'missingmeeting' => $missingmeeting, 'other' => $other, 'total' => $total,'status' => 1);
 		if ($this->Details_model->update($id, $data)) {
-			$datetoday = date("Y-m-d h:i:s");
 
 			$this->pdf = new Pdf();
 	        $this->pdf->AddPage("L", "A5");
@@ -76,41 +89,61 @@ class Details extends CI_Controller
 	        $this->pdf->Cell(50,10, utf8_decode('N° MEDIDOR: '.$detail->meter), 'TBRL',0,'L','0');
 	        $this->pdf->Cell(45,10, utf8_decode('C.I.: '.$detail->ci), 'TBRL',0,'C','0');
 	        $this->pdf->SetX(110);
-	        $this->pdf->Cell(90,10, utf8_decode('N° RECIBO: '.$detail->id), 'TRL',0,'L','0');
-	        $this->pdf->Ln(10);
+	        $this->pdf->Cell(90,8, utf8_decode('N° RECIBO: '.$detail->id), 'TRL',0,'L','0');
+	        $this->pdf->Ln(7);
 			$this->pdf->SetX(110);
 			$this->pdf->SetFont('Arial', '', 10);
-	        $this->pdf->Cell(90,10, utf8_decode('Fecha: '.$datetoday), 'BRL',0,'L','0');
-	        $this->pdf->Ln(10);
+	        $this->pdf->Cell(90,8, utf8_decode('Fecha: '.$datetoday), 'BRL',0,'L','0');
+	        $this->pdf->Ln(5);
 	        $this->pdf->Cell(95,7, utf8_decode('Señor (a): '.$detail->names), '',0,'L','0');
-	        
+			$this->pdf->Ln(5);
+	        $this->pdf->Cell(95,7, utf8_decode('Direccion: '.$detail->address), '',0,'L','0');
+			$this->pdf->Ln(5);
+	        $this->pdf->Cell(55,7, ('Manzano: '.$detail->appletree), '',0,'L','0');
+			$this->pdf->Cell(40,7, ('Lote: '.$detail->lote), '',0,'L','0');
 	        $this->pdf->Ln(7);
 	        $this->pdf->Cell(55,7, 'Lectura anterior: '.$detail->previousreading, '',0,'L','0');
 	        $this->pdf->Cell(40,7, 'Fecha: ' .$detail->previousdate, '',0,'L','0');
 	        $this->pdf->SetX(110);
 	        $this->pdf->Cell(90,7, utf8_decode('Perido: '.$detail->period), '',0,'L','0');
-	        $this->pdf->Ln(7);
+	        $this->pdf->Ln(5);
 	        $this->pdf->Cell(55,7, 'Lectura actual: '.$detail->currentreading, '',0,'L','0');
 	        $this->pdf->Cell(40,7, 'Fecha: '.$detail->currentdate, '',0,'L','0');
 	        $this->pdf->SetX(110);
 	        $this->pdf->Cell(90,7,'Consumo: '.($detail->currentreading-$detail->previousreading).' m3','',0,'L','0');
 	  
-	        $this->pdf->Ln(15);
+	        $this->pdf->Ln(10);
 	        $this->pdf->SetFont('Arial', 'B', 10);
-	        $this->pdf->Cell(15,7,'#','TBL',0,'C','1');
-	        $this->pdf->Cell(100,7,'Detalle de pago','TBRL',0,'C','1');
-	        $this->pdf->Cell(40,7,'Consumo','TBRL',0,'C','1');
-	        $this->pdf->Cell(35,7,'Importe','TBRL',0,'C','1');
+	        $this->pdf->Cell(25,7,'#','TBL',0,'C','1');
+	        $this->pdf->Cell(120,7,'Detalle de pago','TBRL',0,'C','1');
+	        $this->pdf->Cell(45,7,'Importe (Bs)','TBRL',0,'C','1');
 	        
 	        $this->pdf->SetFont('Arial', '', 10);
 	        $this->pdf->Ln(8);
-	        $this->pdf->Cell(15,7,'1','',0,'C','0');
-	        $this->pdf->Cell(100,7,'Pago por consumo de agua','',0,'L','0');
-	        $this->pdf->Cell(40,7, ($detail->currentreading-$detail->previousreading).' m3', '',0,'C','0');
-	        $this->pdf->Cell(35,7, $detail->total, '',0,'C','0');
+	        $this->pdf->Cell(25,7,'1','',0,'C','0');
+	        $this->pdf->Cell(120,7,'Pago por consumo de agua','',0,'L','0');
+	        $this->pdf->Cell(45,7, $detail->amount, '',0,'C','0');
 
+			if($detail->notify == 1) {
+				$this->pdf->Ln(5);
+				$this->pdf->Cell(25,7,'2','',0,'C','0');
+				$this->pdf->Cell(120,7,'Notificacion','',0,'L','0');
+				$this->pdf->Cell(45,7, $detail->notify, '',0,'C','0');
+			}
+			if($detail->missingmeeting > 0) {
+				$this->pdf->Ln(5);
+				$this->pdf->Cell(25,7,'3','',0,'C','0');
+				$this->pdf->Cell(120,7,'Falta a reunion','',0,'L','0');
+				$this->pdf->Cell(45,7, $detail->missingmeeting, '',0,'C','0');
+			}
+			if($detail->other > 0) {
+				$this->pdf->Ln(5);
+				$this->pdf->Cell(25,7,'4','',0,'C','0');
+				$this->pdf->Cell(120,7,'Otros','',0,'L','0');
+				$this->pdf->Cell(45,7, $detail->other, '',0,'C','0');
+			}
 				
-	        $this->pdf->Ln(15);
+	        $this->pdf->Ln(8);
 	        $this->pdf->SetX(165);
 	        $this->pdf->Cell(35,0,'','T',0,'C','0');
 	        $this->pdf->Ln(3);
@@ -118,10 +151,10 @@ class Details extends CI_Controller
 	        $this->pdf->SetFont('Arial', 'B', 12);
 	        $this->pdf->Cell(35,10,'Total: ' .$detail->total .' Bs', 'TBRL',0,'L','0');
 
-	        $this->pdf->Output('I', 'factura.pdf');
+	        $this->pdf->Output('I', 'Recibo de pago.pdf');
 
-	        $data = array('usuario' => $ci);
-			$this->session->set_userdata($data);
+	        // $data = array('user' => $ci);
+			// $this->session->set_userdata($data);
 			$this->searchdetail();
 		} else {
 			

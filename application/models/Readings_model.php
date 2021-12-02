@@ -62,5 +62,19 @@ class Readings_model extends CI_Model {
 		return $resultado->row();
 	}
 
+	public function getQuantityDetail($id_meter, $id_affiliate) {
+		$this->db->select("d.*");
+	    $this->db->from("details d");
+	    $this->db->where("d.id_meter", $id_meter);
+		$this->db->where("d.id_affiliate", $id_affiliate);
+	    $resultados = $this->db->get();
+		if ($resultados->num_rows() > 0) {
+			return $resultados->row();
+		}
+		else{
+			return false;
+		}
+	}
+
 
 }
