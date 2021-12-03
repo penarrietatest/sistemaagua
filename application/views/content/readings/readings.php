@@ -8,7 +8,7 @@
     <section class="content">
     
         <div class="container-fluid">
-            <h3 class="text-center display-4">Lecturar medidor</h3>
+            <h3 class="text-center">Lecturar medidor</h3>
             <div class="row mt-4">
             
                 <div class="col-md-8 offset-md-2">

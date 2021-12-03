@@ -67,6 +67,7 @@ class Readings_model extends CI_Model {
 	    $this->db->from("details d");
 	    $this->db->where("d.id_meter", $id_meter);
 		$this->db->where("d.id_affiliate", $id_affiliate);
+		$this->db->where("d.status", 0);
 	    $resultados = $this->db->get();
 		if ($resultados->num_rows() > 0) {
 			return $resultados->row();

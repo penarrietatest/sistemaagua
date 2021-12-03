@@ -48,7 +48,7 @@ class Details extends CI_Controller
 				$this->load->view("content/details/pay", $data);
 				$this->load->view("layouts/footer");
 			} else {
-				$this->session->set_flashdata("error"," No existe ningun afiliado con ese C.I.");
+				$this->session->set_flashdata("error"," No existe ningun afiliado.");
 				$this->pay();
 			}
 		}else{
@@ -56,21 +56,33 @@ class Details extends CI_Controller
 		}	
 	}
 
-	public function generateinvoice($id, $ci){
-
+	public function detailadd(){
+		$detailId = $this->input->post("detailId");
 		$missingmeeting = $this->input->post("missingmeeting");
 		$other = $this->input->post("other");
+		$total = $this->input->post("total");
 
-		$datetoday = date("Y-m-d h:i:s");
 		if($missingmeeting == 1) {
 			$missingmeeting = 50;
 		} else {
 			$missingmeeting = 0;
 		}
 
-		$total = $missingmeeting + $other;
+		$total = $total + $missingmeeting + $other;
 
-		$data = array('dateofissue' => $datetoday, 'missingmeeting' => $missingmeeting, 'other' => $other, 'total' => $total,'status' => 1);
+		$data = array('missingmeeting' => $missingmeeting, 'other' => $other, 'total' => $total);
+		if ($this->Details_model->update($detailId, $data)) {
+
+			$this->generateinvoice($detailId);
+		}
+			
+	}
+
+	public function generateinvoice($id){
+
+		$datetoday = date("Y-m-d h:i:s");
+		
+		$data = array('dateofissue' => $datetoday, 'status' => 1);
 		if ($this->Details_model->update($id, $data)) {
 
 			$this->pdf = new Pdf();
@@ -132,13 +144,26 @@ class Details extends CI_Controller
 			}
 			if($detail->missingmeeting > 0) {
 				$this->pdf->Ln(5);
-				$this->pdf->Cell(25,7,'3','',0,'C','0');
+				if ($detail->notify == 1) {
+					$this->pdf->Cell(25,7,'3','',0,'C','0');
+				} else {
+					$this->pdf->Cell(25,7,'2','',0,'C','0');
+				}
+				
 				$this->pdf->Cell(120,7,'Falta a reunion','',0,'L','0');
 				$this->pdf->Cell(45,7, $detail->missingmeeting, '',0,'C','0');
 			}
 			if($detail->other > 0) {
 				$this->pdf->Ln(5);
-				$this->pdf->Cell(25,7,'4','',0,'C','0');
+				if ($detail->missingmeeting > 0 && $detail->notify == 1) {
+					$this->pdf->Cell(25,7,'4','',0,'C','0');
+
+				} else if($detail->missingmeeting > 0){
+					$this->pdf->Cell(25,7,'3','',0,'C','0');
+				} else {
+					$this->pdf->Cell(25,7,'2','',0,'C','0');
+				}
+				
 				$this->pdf->Cell(120,7,'Otros','',0,'L','0');
 				$this->pdf->Cell(45,7, $detail->other, '',0,'C','0');
 			}
@@ -151,7 +176,7 @@ class Details extends CI_Controller
 	        $this->pdf->SetFont('Arial', 'B', 12);
 	        $this->pdf->Cell(35,10,'Total: ' .$detail->total .' Bs', 'TBRL',0,'L','0');
 
-	        $this->pdf->Output('I', 'Recibo de pago.pdf');
+	        $this->pdf->Output('D', 'Recibo de pago.pdf');
 
 	        // $data = array('user' => $ci);
 			// $this->session->set_userdata($data);

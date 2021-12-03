@@ -8,7 +8,7 @@
     <section class="content">
     
         <div class="container-fluid">
-            <h3 class="text-center display-4">Pagar recibo</h3>
+            <h3 class="text-center">Pagar recibo</h3>
             <div class="row mt-4">
             
                 <div class="col-md-8 offset-md-2">
@@ -39,14 +39,14 @@
             
             
 
-            <?php if(!empty($details)):?>
+            <?php if(!empty($meter)):?>
             
             <div class="row mt-5">
                 <div class="col-md-10 offset-md-1">
                     <div class="list-group">
                         <div class="list-group-item">
                             <div class="row">
-                                <div class="col px-4">
+                                <div class="col px-2">
                                     <div>
                                         <div class="float-right"> CI: </b> <?php echo $meter->ci; ?></div>
                                         <h4>Afiliado: <?php echo $meter->names.' '.$meter->firstname.' '.$meter->lastname; ?></h4>
@@ -80,26 +80,31 @@
                         <?php if (!empty($details)) : ?>
                             <?php foreach ($details as $detail) : ?>
                                 <tr>
-                                    <td><?php echo $detail->meter; ?></td>
-                                    <td><?php echo $detail->period; ?></td>
-                                    <td>
-                                        <label class="switch">
-                                            <input type="checkbox" name="missingmeeting" value="1">
-                                            <span class="slider round"></span>
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control" name="other" min="0" value="0" onchange="getValueInput()" id="domTextElement">
-                                    </td>
-                                    <td><?php echo $detail->total .' Bs'; ?></td>
-                                    <?php $datadetail = $detail->id."*".$detail->period."*".$detail->dateofissue."*".$detail->amount."*".$detail->total."*".$detail->previousreading."*".$detail->currentreading."*".$detail->previousdate."*".$detail->currentdate."*".$detail->names."*".$detail->notify."*".$detail->ci."*".$detail->address."*".$detail->meter."*".$detail->appletree."*".$detail->lote;?>
-                            
-                                    <td>
-                                        <div class="btn-group">
-                                            <button class="btn btn-info btn-view-factura" data-toggle="modal" data-target="#modal-default" value="<?php echo $datadetail ;?>"><i class="far fa-eye"></i> VER</button>
-                                            <a  href="<?php echo base_url();?>details/generateinvoice/<?php echo $detail->id;?>/<?php echo $meter->ci;?>" target="_blank" class="btn btn-success"><i class="fas fa-cart-arrow-down"></i> PAGAR</a>
-                                        </div>
-                                    </td>
+
+                                    <form class="form-horizontal" action="<?php echo base_url(); ?>details/detailadd" method="post" enctype="multipart/form-data">
+                                        <td><?php echo $detail->meter; ?></td>
+                                        <td><?php echo $detail->period; ?></td>
+                                        <td>
+                                            <label class="switch">
+                                                <input type="checkbox" name="missingmeeting" value="1">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" name="other" min="0" value="0">
+                                        </td>
+                                        <input type="hidden" name="detailId" value="<?php echo $detail->id;?>">
+                                        <input type="hidden" name="total" value="<?php echo $detail->total;?>">
+                                        <td><?php echo $detail->total .' Bs'; ?></td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <!-- <button type="submit" class="btn btn-primary"><i class="fas fa-cart-plus"></i> AÑADIR</button> -->
+                                                <button type="submit" class="btn btn-success"><i class="fas fa-cart-arrow-down"></i> PAGAR</button>
+                                                <!-- <a href="<?php echo base_url();?>details/generateinvoice/<?php echo $detail->id;?>/<?php echo $meter->ci;?>" target="_blank" class="btn btn-success"><i class="fas fa-cart-arrow-down"></i> PAGAR</a> -->
+                                            </div>
+                                        </td>
+                                    </form>
+
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -107,29 +112,8 @@
                 </table>
             </div>
             <!-- /.card-body -->
-
             <?php endif;?>
             <!--row -->
-
-
-
-            <script>
-                var Var_JavaScript = 0;    // declaración de la variable 
-                const getValueInput = () =>{
-                    let inputValue = document.getElementById("domTextElement").value; 
-                    Var_JavaScript = inputValue;
-                }
-            
-                var Var_JavaScript;    // declaración de la variable 
-            
-            </script>  
-            <?php
-                $var_PHP = "<script> document.writeln(Var_JavaScript); </script>"; // igualar el valor de la variable JavaScript a PHP 
-                echo $var_PHP   // muestra el resultado 
-            ?>
-
-
-
 
         </div>
     </section>
@@ -137,18 +121,3 @@
 <!-- /.content-wrapper -->
 
 <!-- ======================================================================================================= -->
-
-
- <!-- Large modal -->
- <div class="modal fade bd-example-modal-lg" id="modal-default">
-    <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-        <div class="modal-body">
-
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        </div>
-    </div>
-    </div>
-</div>
