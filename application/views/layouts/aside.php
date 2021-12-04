@@ -33,6 +33,8 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+
+        <?php if ( $this->session->userdata("rol")==1 || $this->session->userdata("rol")==2 ): ?>
           <li class="nav-item has-treeview">
             <a href="<?php echo base_url();?>" class="nav-link <?php echo ($this->uri->segment(1)=='home') ? 'active' : ''?>">
               <i class="nav-icon fas fa-home"></i>
@@ -51,13 +53,16 @@
               <p> Medidores</p>
             </a>
           </li>
+        <?php endif; ?>
+        <?php if ( $this->session->userdata("rol")==1 || $this->session->userdata("rol")==2 || $this->session->userdata("rol")==3 ): ?>
           <li class="nav-item has-treeview">
             <a href="<?php echo base_url(); ?>readings" class="nav-link <?php echo ($this->uri->segment(1)=='readings') ? 'active' : ''?>">
             <i class="nav-icon fas fa-glasses"></i>
               <p> Lecturas</p>
             </a>
           </li>
-
+        <?php endif; ?>
+        <?php if ( $this->session->userdata("rol")==1 || $this->session->userdata("rol")==2 ): ?>
           <li class="nav-item has-treeview <?php echo ($this->uri->segment(1)=='details' || $this->uri->segment(1)=='invoice') ? 'menu-open' : ''?>">
             <a href="" class="nav-link <?php echo ($this->uri->segment(1)=='details' || $this->uri->segment(1)=='invoice') ? 'active' : ''?>">
               <i class="nav-icon fas fa-file-invoice"></i>
@@ -84,7 +89,8 @@
               </li>
             </ul>
           </li>
-
+        <?php endif; ?>
+        <?php if ( $this->session->userdata("rol")==1): ?>
           <li class="nav-header">CONFIGURACION</li>
 
           <li class="nav-item has-treeview">
@@ -107,7 +113,7 @@
               <p> Backup Database </p>
             </a> 
           </li>
-          
+        <?php endif; ?>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
