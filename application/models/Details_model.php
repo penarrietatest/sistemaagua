@@ -66,4 +66,20 @@ class Details_model extends CI_Model {
 		return $resultado->row();
 	}
 
+	public function getVerifyReconnection($meterId, $AffiliateId){
+		$this->db->select("id");
+	    $this->db->from("details");
+		$this->db->where("id_meter", $meterId);
+		$this->db->where("id_affiliate", $AffiliateId);
+	    $this->db->order_by('id', "desc");
+	    $this->db->limit(1);
+	    $resultados = $this->db->get();
+		if ($resultados->num_rows() > 0) {
+			return $resultados->row();
+		}
+		else{
+			return false;
+		}
+	}
+
 }

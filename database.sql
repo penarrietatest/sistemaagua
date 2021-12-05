@@ -83,6 +83,8 @@ CREATE TABLE details (
   amount FLOAT,
   notify INT,
   missingmeeting INT,
+  pendingdetails INT,
+  reconnection INT,
   other INT,
   total FLOAT,
   status INT,

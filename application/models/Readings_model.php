@@ -77,5 +77,16 @@ class Readings_model extends CI_Model {
 		}
 	}
 
+	public function getPendingDetails($id_meter, $id_affiliate) {
+		$this->db->select("COUNT(d.id) as n");
+	    $this->db->from("details d");
+	    $this->db->where("d.id_meter", $id_meter);
+		$this->db->where("d.id_affiliate", $id_affiliate);
+		$this->db->where("d.pendingdetails", 1);
+		$this->db->where("d.status", 0);
+	    $resultados = $this->db->get();
+		return $resultados->row();
+	}
+
 
 }

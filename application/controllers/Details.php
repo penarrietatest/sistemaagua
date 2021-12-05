@@ -61,6 +61,8 @@ class Details extends CI_Controller
 		$missingmeeting = $this->input->post("missingmeeting");
 		$other = $this->input->post("other");
 		$total = $this->input->post("total");
+		$meterId = $this->input->post("meterId");
+		$AffiliateId = $this->input->post("AffiliateId");
 
 		if($missingmeeting == 1) {
 			$missingmeeting = 50;
@@ -68,7 +70,10 @@ class Details extends CI_Controller
 			$missingmeeting = 0;
 		}
 
-		$total = $total + $missingmeeting + $other;
+		$verifyreconnection = $this->Details_model->getVerifyReconnection($meterId, $AffiliateId);
+
+
+		$total = $total + $missingmeeting + $other + $verifyreconnection->reconnection;
 
 		$data = array('missingmeeting' => $missingmeeting, 'other' => $other, 'total' => $total);
 		if ($this->Details_model->update($detailId, $data)) {
@@ -82,7 +87,7 @@ class Details extends CI_Controller
 
 		$datetoday = date("Y-m-d h:i:s");
 		
-		$data = array('dateofissue' => $datetoday, 'status' => 1);
+		$data = array('dateofissue' => $datetoday, 'pendingdetails' => 0, 'status' => 1);
 		if ($this->Details_model->update($id, $data)) {
 
 			$this->pdf = new Pdf();
@@ -132,46 +137,41 @@ class Details extends CI_Controller
 	        
 	        $this->pdf->SetFont('Arial', '', 10);
 	        $this->pdf->Ln(8);
-	        $this->pdf->Cell(25,7,'1','',0,'C','0');
+	        $this->pdf->Cell(25,7,'-','',0,'C','0');
 	        $this->pdf->Cell(120,7,'Pago por consumo de agua','',0,'L','0');
 	        $this->pdf->Cell(45,7, $detail->amount, '',0,'C','0');
 
 			if($detail->notify == 1) {
 				$this->pdf->Ln(5);
-				$this->pdf->Cell(25,7,'2','',0,'C','0');
+				$this->pdf->Cell(25,7,'-','',0,'C','0');
 				$this->pdf->Cell(120,7,'Notificacion','',0,'L','0');
 				$this->pdf->Cell(45,7, $detail->notify, '',0,'C','0');
 			}
 			if($detail->missingmeeting > 0) {
 				$this->pdf->Ln(5);
-				if ($detail->notify == 1) {
-					$this->pdf->Cell(25,7,'3','',0,'C','0');
-				} else {
-					$this->pdf->Cell(25,7,'2','',0,'C','0');
-				}
-				
+				$this->pdf->Cell(25,7,'-','',0,'C','0');
 				$this->pdf->Cell(120,7,'Falta a reunion','',0,'L','0');
 				$this->pdf->Cell(45,7, $detail->missingmeeting, '',0,'C','0');
 			}
+
+			if($detail->reconnection > 0) {
+				$this->pdf->Ln(5);
+				$this->pdf->Cell(25,7,'-','',0,'C','0');
+				$this->pdf->Cell(120,7,'Reconexion','',0,'L','0');
+				$this->pdf->Cell(45,7, $detail->reconnection, '',0,'C','0');
+			}
+
 			if($detail->other > 0) {
 				$this->pdf->Ln(5);
-				if ($detail->missingmeeting > 0 && $detail->notify == 1) {
-					$this->pdf->Cell(25,7,'4','',0,'C','0');
-
-				} else if($detail->missingmeeting > 0){
-					$this->pdf->Cell(25,7,'3','',0,'C','0');
-				} else {
-					$this->pdf->Cell(25,7,'2','',0,'C','0');
-				}
-				
+				$this->pdf->Cell(25,7,'-','',0,'C','0');
 				$this->pdf->Cell(120,7,'Otros','',0,'L','0');
 				$this->pdf->Cell(45,7, $detail->other, '',0,'C','0');
 			}
 				
-	        $this->pdf->Ln(8);
+	        $this->pdf->Ln(7);
 	        $this->pdf->SetX(165);
 	        $this->pdf->Cell(35,0,'','T',0,'C','0');
-	        $this->pdf->Ln(3);
+	        $this->pdf->Ln(1);
 	        $this->pdf->SetX(165);
 	        $this->pdf->SetFont('Arial', 'B', 12);
 	        $this->pdf->Cell(35,10,'Total: ' .$detail->total .' Bs', 'TBRL',0,'L','0');

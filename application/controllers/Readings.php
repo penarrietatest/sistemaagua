@@ -74,9 +74,9 @@ class Readings extends CI_Controller
 		$month = ucwords(strftime("%B"));
 		$year = strftime("%Y");
 		$period = $month .' / '. $year;
-
+		
 		$currentdate = date("Y-m-d");
-        
+
 		$this->form_validation->set_rules("currentreading", "nueva lectura", "required|alpha_numeric_spaces");
 		$this->form_validation->set_rules("observation", "observacion", "regex_match[/^[a-zñáéíóúüA-ZÑÁÉÍÓÚÜ ,.]*$/u]");
 	
@@ -93,17 +93,28 @@ class Readings extends CI_Controller
 				} else {
 					$notify = 0;
 				}
+
+
+				$pendingdetail = $this->Readings_model->getPendingDetails($id_meter, $id_affiliate);
+				if($pendingdetail->n == 2) {
+					$reconnection = 50;
+				} else {
+					$reconnection = 0;
+				}
+				$pendingdetails = 1;
+				
+
 				$pcs = $this->Readings_model->getPrices();
 				$amount = (($currentreading - $p_reading ) * $pcs->price);
 				$total = $amount + $notify;
 
-				$datadetail = array('id_meter' => $id_meter, 'previousreading' => $p_reading, 'currentreading' => $currentreading, 'period' => $period, 'previousdate' => $previousdate, 'currentdate' => $currentdate, 'dateofissue' => $currentdate, 'id_affiliate' => $id_affiliate, 'notify' => $notify, 'amount' => $amount, 'total' => $total, 'status' => 0,);			 
+				$datadetail = array('id_meter' => $id_meter, 'previousreading' => $p_reading, 'currentreading' => $currentreading, 'period' => $period, 'previousdate' => $previousdate, 'currentdate' => $currentdate, 'dateofissue' => $currentdate, 'id_affiliate' => $id_affiliate, 'notify' => $notify, 'amount' => $amount, 'pendingdetails' => $pendingdetails, 'reconnection' => $reconnection, 'total' => $total, 'status' => 0,);			 
 				//--------------------------
 
 				if ($this->Readings_model->saver($data) && $this->Details_model->save($datadetail)) {
 
 					$this->session->set_flashdata("success"," Lectura registrada correctamente.");
-					redirect(base_url()."Readings");
+					redirect(base_url()."readings");
 				}
 
 			} else {

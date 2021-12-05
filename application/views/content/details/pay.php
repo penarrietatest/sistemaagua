@@ -94,6 +94,8 @@
                                             <input type="number" class="form-control" name="other" min="0" value="0">
                                         </td>
                                         <input type="hidden" name="detailId" value="<?php echo $detail->id;?>">
+                                        <input type="hidden" name="meterId" value="<?php echo $detail->meter; ?>">
+                                        <input type="hidden" name="AffiliateId" value="<?php echo $detail->id_affiliate;?>">
                                         <input type="hidden" name="total" value="<?php echo $detail->total;?>">
                                         <td><?php echo $detail->total .' Bs'; ?></td>
                                         <td>
