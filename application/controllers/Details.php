@@ -62,7 +62,7 @@ class Details extends CI_Controller
 		$other = $this->input->post("other");
 		$total = $this->input->post("total");
 		$meterId = $this->input->post("meterId");
-		$AffiliateId = $this->input->post("AffiliateId");
+		$affiliateId = $this->input->post("affiliateId");
 
 		if($missingmeeting == 1) {
 			$missingmeeting = 50;
@@ -70,7 +70,8 @@ class Details extends CI_Controller
 			$missingmeeting = 0;
 		}
 
-		$verifyreconnection = $this->Details_model->getVerifyReconnection($meterId, $AffiliateId);
+		$verifyreconnection = $this->Details_model->getVerifyReconnection($meterId, $affiliateId);
+
 
 
 		$total = $total + $missingmeeting + $other + $verifyreconnection->reconnection;
@@ -176,7 +177,7 @@ class Details extends CI_Controller
 	        $this->pdf->SetFont('Arial', 'B', 12);
 	        $this->pdf->Cell(35,10,'Total: ' .$detail->total .' Bs', 'TBRL',0,'L','0');
 
-	        $this->pdf->Output('D', 'Recibo de pago.pdf');
+	        $this->pdf->Output('I', 'Recibo de pago.pdf');
 
 	        // $data = array('user' => $ci);
 			// $this->session->set_userdata($data);

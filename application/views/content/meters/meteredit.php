@@ -37,12 +37,12 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Nro medidor *</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control <?php echo !empty(form_error("meter")) ? 'is-invalid' : '' ?>" name="meter" value="<?php echo !empty(form_error('meter')) ? set_value("meter") :  $meter->meter;?>">
+                                    <input type="text" class="form-control <?php echo !empty(form_error("meter")) ? 'is-invalid' : '' ?>" name="meter" value="<?php echo !empty(form_error('meter')) ? set_value("meter") :  $meter->meter;?>" readonly>
                                     <?php echo form_error("meter", '<div class="invalid-feedback">', '</div>'); ?>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Rol *</label>
+                                <label class="col-sm-2 col-form-label">Afiliado *</label>
                                 <div class="col-sm-10">
                                     <select class="custom-select <?php echo !empty(form_error("id_affiliate")) ? 'is-invalid' : '' ?>" name="id_affiliate">
                                         <option></option>
@@ -73,7 +73,7 @@
                         <!-- /.card-body -->
                         <div class="card-footer">
                             <a href="<?php echo base_url(); ?>meters" class="btn btn-default">Cancelar</a>
-                            <button type="submit" class="btn btn-info float-right">Registar</button>
+                            <button type="submit" class="btn btn-info float-right">Modificar</button>
                         </div>
                         <!-- /.card-footer -->
                     </form>

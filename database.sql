@@ -24,7 +24,7 @@ CREATE TABLE users (
   UNIQUE(username),
   FOREIGN KEY (id_roles) REFERENCES roles (id)
 );
-INSERT INTO users VALUES (1, 'Ruben', 'Penarrieta', 'Romero', 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 1, '619c40e76a6321522772760-5ac29cadeca5b.jpg', 1);
+INSERT INTO users VALUES (1, 'Alex', 'Garcia', '', 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 1, '619c40e76a6321522772760-5ac29cadeca5b.jpg', 1);
 
 
 CREATE TABLE affiliates (
@@ -39,7 +39,6 @@ CREATE TABLE affiliates (
   phone INT(11),
   status INT
 );
-INSERT INTO affiliates VALUES (1, '4301028', 'Wilber', 'Guarena', 'Carrillo', 'Av. Villazon km 5', 51, 7, 4854545, 1);
 
 CREATE TABLE meters (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -51,7 +50,6 @@ CREATE TABLE meters (
   status INT,
   FOREIGN KEY (id_affiliate) REFERENCES affiliates (id)
 );
-INSERT INTO meters VALUES (1, '1', 1, 0, '2021-11-24', 'Nuevo', 1);
 
 CREATE TABLE prices (
   id int PRIMARY KEY AUTO_INCREMENT,

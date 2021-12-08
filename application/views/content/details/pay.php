@@ -20,7 +20,7 @@
                         </button>
                     </div>
                 <?php endif; ?>
-                    <form action="<?php echo base_url();?>details/searchdetail" method="POST">
+                    <form action="<?php echo base_url();?>details/searchdetail" method="post">
                         <div class="input-group">
                             <input type="search" name="appletree" class="form-control form-control-lg <?php echo !empty(form_error("appletree")) ? 'is-invalid' : '' ?>" placeholder="Manzano." value="<?php echo set_value("appletree"); ?>">
                             <?php echo form_error("appletree", '<div class="invalid-feedback">', '</div>'); ?>
@@ -63,8 +63,8 @@
 
             <hr>
             
-            <!-- /.card-header -->
-            <div class="card-body">
+<!-- /.card-header -->
+<div class="card-body">
                 <table id="" class="table table-striped table-bordered dt-responsive nowrap display" style="width:100%">
                     <thead>
                         <tr>
@@ -79,9 +79,9 @@
                     <tbody>
                         <?php if (!empty($details)) : ?>
                             <?php foreach ($details as $detail) : ?>
-                                <tr>
-
-                                    <form class="form-horizontal" action="<?php echo base_url(); ?>details/detailadd" method="post" enctype="multipart/form-data">
+                                
+                                    <tr>
+                                    <form class="form-horizontal" action="<?php echo base_url(); ?>details/detailadd" method="post" enctype="multipart/form-data" target="_blank">
                                         <td><?php echo $detail->meter; ?></td>
                                         <td><?php echo $detail->period; ?></td>
                                         <td>
@@ -95,19 +95,17 @@
                                         </td>
                                         <input type="hidden" name="detailId" value="<?php echo $detail->id;?>">
                                         <input type="hidden" name="meterId" value="<?php echo $detail->meter; ?>">
-                                        <input type="hidden" name="AffiliateId" value="<?php echo $detail->id_affiliate;?>">
+                                        <input type="hidden" name="affiliateId" value="<?php echo $detail->id_affiliate;?>">
                                         <input type="hidden" name="total" value="<?php echo $detail->total;?>">
                                         <td><?php echo $detail->total .' Bs'; ?></td>
                                         <td>
                                             <div class="btn-group">
-                                                <!-- <button type="submit" class="btn btn-primary"><i class="fas fa-cart-plus"></i> AÑADIR</button> -->
                                                 <button type="submit" class="btn btn-success"><i class="fas fa-cart-arrow-down"></i> PAGAR</button>
-                                                <!-- <a href="<?php echo base_url();?>details/generateinvoice/<?php echo $detail->id;?>/<?php echo $meter->ci;?>" target="_blank" class="btn btn-success"><i class="fas fa-cart-arrow-down"></i> PAGAR</a> -->
                                             </div>
-                                        </td>
-                                    </form>
-
-                                </tr>
+                                        </td> 
+                                        </form>
+                                    </tr>
+                                
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </tbody>

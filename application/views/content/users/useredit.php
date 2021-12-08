@@ -118,7 +118,7 @@
                         <!-- /.card-body -->
                         <div class="card-footer">
                             <a href="<?php echo base_url(); ?>users" class="btn btn-default">Cancelar</a>
-                            <button type="submit" class="btn btn-info float-right">Registar</button>
+                            <button type="submit" class="btn btn-info float-right">Modificar</button>
                         </div>
                         <!-- /.card-footer -->
                     </form>
